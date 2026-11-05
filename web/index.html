@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agente Periferia</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="marca">
+      <span class="logo" aria-hidden="true">◆</span>
+      <div>
+        <h1 id="titulo">Agente</h1>
+        <p class="sub">Agente conversacional · Perxia 2.0 · Periferia IT Group</p>
+      </div>
+    </div>
+    <div class="acciones">
+      <span id="modelo" class="badge">conectando…</span>
+      <button id="nueva" class="btn-sec" type="button">Nueva sesión</button>
+    </div>
+  </header>
+
+  <main id="chat" class="chat" aria-live="polite">
+    <section id="bienvenida" class="bienvenida">
+      <h2>¿Qué proceso?</h2>
+      <p>Escribe una instrucción o usa un ejemplo. Verás cada herramienta que el agente ejecuta y se resaltará cuando necesite tu confirmación.</p>
+      <div id="ejemplos" class="ejemplos"></div>
+    </section>
+  </main>
+
+  <div id="pensando" class="pensando" hidden>
+    <span class="punto"></span><span class="punto"></span><span class="punto"></span>
+    <span>El agente está pensando y ejecutando herramientas…</span>
+  </div>
+
+  <form id="form" class="entrada">
+    <textarea id="mensaje" rows="2" maxlength="4000" placeholder="Escribe tu mensaje… (Enter envía, Shift+Enter salto de línea)" required></textarea>
+    <button id="enviar" class="btn" type="submit">Enviar</button>
+  </form>
+  <footer class="pie">Sesión <code id="sid"></code> · tokens <span id="tokens">0</span></footer>
+  <script src="app.js"></script>
+</body>
+</html>

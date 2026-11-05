@@ -1,0 +1,43 @@
+{
+  "_descripcion": "Parámetros de negocio que leen las herramientas. Cambiar una regla aquí no exige tocar el servidor ni el código.",
+  "umbral_confianza": 0.8,
+  "similitud_objeto_actualizacion": 0.9,
+  "dias_alerta_vencimiento": 60,
+  "fecha_corte_maestro": "2026-05-30",
+  "monedas": ["COP", "USD", "PEN", "PAB", "HNL"],
+  "paises": ["CO", "EC", "PE", "PA", "HN"],
+  "nombre_propio": "PERIFERIA IT GROUP",
+  "pais_por_nombre": {
+    "colombia": "CO", "bogota": "CO", "medellin": "CO", "barranquilla": "CO", "cali": "CO",
+    "ecuador": "EC", "quito": "EC", "guayaquil": "EC",
+    "peru": "PE", "lima": "PE",
+    "panama": "PA",
+    "honduras": "HN", "tegucigalpa": "HN", "san pedro sula": "HN"
+  },
+  "tipos_poliza": {
+    "cumplimiento": "cumplimiento",
+    "responsabilidad civil": "responsabilidad_civil",
+    "calidad": "calidad",
+    "salarios y prestaciones": "salarios_prestaciones",
+    "buen manejo del anticipo": "anticipo"
+  },
+  "confianza": {
+    "id_documento": 0.98,
+    "parte_con_identificador": 0.95,
+    "nombre_sin_firma": 0.85,
+    "pais_por_domicilio": 0.95,
+    "pais_por_identificador": 0.85,
+    "objeto": 0.9,
+    "objeto_truncado": 0.85,
+    "valor_con_moneda": 0.95,
+    "valor_indeterminado": 0.5,
+    "fecha_explicita": 0.95,
+    "fecha_firma_exacta": 0.9,
+    "fecha_solo_mes": 0.8,
+    "fecha_derivada_plazo": 0.85,
+    "fecha_con_prorroga_automatica": 0.5,
+    "poliza_explicita": 0.9,
+    "poliza_condicional": 0.85,
+    "sin_poliza": 0.9
+  }
+}

@@ -1,0 +1,19 @@
+# Blueprint de Render (render.com): crea el servicio web desde este repositorio usando el Dockerfile.
+# La clave del modelo se carga a mano en el panel de Render (sync: false): nunca va en el repositorio.
+services:
+  - type: web
+    name: reto-02-registro-contratos
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: LLM_PROVIDER
+        value: anthropic
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        sync: false
+      - key: ACCESS_KEY
+        sync: false
+      - key: MAX_TOKENS_SESION
+        value: "500000"

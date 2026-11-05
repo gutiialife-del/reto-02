@@ -1,0 +1,25 @@
+{
+  "name": "reto-02-registro-contratos",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Agente conversacional de registro de contratos vigentes (Reto 02 · Perxia 2.0)",
+  "scripts": {
+    "dev": "bun --watch src/server.ts",
+    "start": "bun src/server.ts",
+    "demo": "bun run demo.ts",
+    "typecheck": "tsc --noEmit",
+    "modulo": "bun scripts/modulo.ts",
+    "modulo:check": "bun scripts/modulo.ts --check"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}
