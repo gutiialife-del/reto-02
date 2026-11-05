@@ -170,6 +170,10 @@ function senalDeConfirmacion(r: ToolCallRecord): Session["pendiente"] {
     const detalle = typeof r.args.detalle === "string" ? r.args.detalle : ""
     return { accion, detalle }
   }
+  // Una herramienta puede declarar que su resultado exige una decisión humana (p. ej. campos en revisión).
+  const data = r.ok && r.resultado && typeof r.resultado === "object" ? (r.resultado as Record<string, unknown>) : null
+  const p = data?.pendiente_confirmacion as { accion?: unknown; detalle?: unknown } | undefined
+  if (p && typeof p.accion === "string") return { accion: p.accion, detalle: typeof p.detalle === "string" ? p.detalle : "" }
   if (r.bloqueadaPorConfirmacion) return { accion: r.nombre, detalle: "acción bloqueada a la espera de confirmación" }
   if (!r.ok && /requiere (confirmaci[oó]n|revisi[oó]n)/i.test(r.resumen)) {
     return { accion: r.nombre, detalle: r.resumen.replace(/^error: /, "") }

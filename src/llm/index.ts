@@ -6,9 +6,9 @@ import { SimuladoAdapter } from "./simulado"
 import { guion } from "./guion"
 
 export function crearAdapter(env: NodeJS.ProcessEnv = process.env): LlmAdapter {
-  const provider = (env.LLM_PROVIDER ?? "anthropic").toLowerCase()
+  const provider = (env.LLM_PROVIDER || "anthropic").toLowerCase()
   if (provider === "simulado") return new SimuladoAdapter(guion)
-  const key = env.LLM_API_KEY ?? ""
+  const key = (env.LLM_API_KEY ?? "").trim()
   if (!key) {
     throw new Error(
       "Falta LLM_API_KEY. Configúrala como variable de entorno del backend, o usa LLM_PROVIDER=simulado para probar sin modelo.",

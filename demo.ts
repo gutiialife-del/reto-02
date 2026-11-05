@@ -14,7 +14,7 @@ import { verificarModulo } from "./scripts/modulo"
 const ROOT = path.dirname(fileURLToPath(import.meta.url))
 setRaiz(ROOT)
 // Fecha fija por defecto (fecha del PRD): fecha de registro y alertas deterministas.
-process.env.FECHA_REFERENCIA ??= "2026-09-03"
+process.env.FECHA_REFERENCIA ||= "2026-09-03"
 const HOY = process.env.FECHA_REFERENCIA
 const tools = new Map(registrarHerramientas(APP.herramientas).map((t) => [t.nombre, t.tool]))
 

@@ -109,6 +109,9 @@ export const validar = defineTool({
       const { extraccion: _e, ...visible } = v
       return ok({
         ...visible,
+        ...(v.requiere_revision.length
+          ? { pendiente_confirmacion: { accion: `registrar ${args.mensaje_id} con los campos en revisión confirmados por el usuario`, detalle: v.detalle_revision.map((r) => `${r.campo} = ${JSON.stringify(r.valor)} (${r.motivo})`).join("; ") } }
+          : {}),
         resumen: `${v.clasificacion}${v.id_contrato_existente ? ` (existente ${v.id_contrato_existente})` : ""}${v.requiere_revision.length ? ` · revisar: ${v.requiere_revision.join(", ")}` : ""}${v.motivo ? ` · ${v.motivo}` : ""}`,
       })
     })

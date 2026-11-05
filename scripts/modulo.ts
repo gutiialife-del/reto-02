@@ -75,7 +75,7 @@ async function main(): Promise<void> {
   console.log("modulo/ generado.")
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+if (process.argv[1] && fileURLToPath(import.meta.url).toLowerCase() === path.resolve(process.argv[1]).toLowerCase()) {
   main().catch((e: unknown) => {
     console.error(e instanceof Error ? e.message : e)
     process.exitCode = 1

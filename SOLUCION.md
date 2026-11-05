@@ -40,7 +40,7 @@ Implementado en `src/agent/loop.ts` (`ejecutarTurno`):
 
 **Confirmación humana (CA3 / regla de "confirmación en el turno inmediatamente anterior").** No depende de que el modelo se porte bien; la hace cumplir el servidor:
 
-- Para pedir confirmación, el agente llama `agente_solicitar_confirmacion({ accion, detalle })` y termina el turno con la pregunta. También queda pendiente cuando una herramienta responde `requiere confirmación` / `requiere revisión`. La sesión guarda esa marca y el front pinta el mensaje en amarillo con botones **Confirmo / No confirmo**.
+- Para pedir confirmación, el agente llama `agente_solicitar_confirmacion({ accion, detalle })` y termina el turno con la pregunta. También queda pendiente, sin depender del modelo, cuando una herramienta lo declara en su resultado (`pendiente_confirmacion`: campos en revisión, OC con excepciones, paquete listo para enviar) o responde `requiere confirmación` / `requiere revisión`. La sesión guarda esa marca y el front pinta el mensaje en amarillo con botones **Confirmo / No confirmo**.
 - En el turno siguiente, el servidor clasifica el mensaje del usuario (`esAfirmativo` / `esNegativo`). Solo si había una marca pendiente **y** el mensaje es afirmativo, ese turno queda habilitado para llamadas con `confirmado: true`; el modelo recibe una nota explícita indicando qué se confirmó.
 - Cualquier llamada con `confirmado: true` en un turno no habilitado se bloquea **antes** de ejecutar la herramienta y vuelve al modelo como error. Una pregunta escrita sin la marca formal se resalta en el front, pero no habilita nada.
 

@@ -19,7 +19,19 @@ cp .env.example .env      # completa LLM_API_KEY (y LLM_MODEL si usas openai)
 bun run dev               # front + backend en http://localhost:3000
 ```
 
-Bun carga `.env` automáticamente. Sin clave puedes revisar la interfaz con el proveedor **simulado** (un guion fijo, no un modelo de lenguaje):
+Bun carga `.env` automáticamente.
+
+**Windows (PowerShell), con OpenAI y sin escribir la clave en disco:**
+
+```powershell
+$env:LLM_PROVIDER = "openai"
+$env:LLM_MODEL    = "gpt-4.1-mini"     # o cualquier modelo de chat disponible en tu cuenta
+$env:LLM_API_KEY  = "sk-..."           # tu clave; vive solo en esta ventana de PowerShell
+bun install
+bun run dev
+```
+
+Sin clave puedes revisar la interfaz con el proveedor **simulado** (un guion fijo, no un modelo de lenguaje):
 
 ```bash
 LLM_PROVIDER=simulado bun run dev

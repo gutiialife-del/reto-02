@@ -30,9 +30,12 @@ export class OpenAICompatAdapter implements LlmAdapter {
   }
 
   async enviar(mensajes: ChatMessage[], herramientas: ToolSpec[], op: EnviarOpciones): Promise<LlmResponse> {
+    // OpenAI usa max_completion_tokens (sus modelos de razonamiento rechazan max_tokens);
+    // otros proveedores compatibles siguen esperando max_tokens.
+    const limite = this.baseUrl.includes("api.openai.com") ? { max_completion_tokens: op.maxTokens } : { max_tokens: op.maxTokens }
     const body = {
       model: this.model,
-      max_tokens: op.maxTokens,
+      ...limite,
       messages: [{ role: "system", content: op.system } as MensajeOpenAI, ...convertir(mensajes)],
       tools: herramientas.map((h) => ({
         type: "function",
