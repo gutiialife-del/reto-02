@@ -50,10 +50,15 @@ En este reto la acción que exige confirmación es `contratos_registrar` cuando 
 
 ## 4. Elección del modelo
 
-- **Proveedor por defecto:** Anthropic, modelo `claude-sonnet-5-5` (configurable con `LLM_MODEL`). Motivos: buen seguimiento de instrucciones largas en español, uso de herramientas en paralelo (varias llamadas en una misma respuesta) y respuestas estructuradas. Para bajar costo se puede usar un modelo más pequeño de la misma familia cambiando solo `LLM_MODEL`; el diseño lo tolera porque los valores y las reglas los calculan las herramientas, no el modelo.
-- **Alternativa sin tocar el ciclo:** `LLM_PROVIDER=openai` usa cualquier API compatible con OpenAI Chat Completions (OpenAI u otros proveedores vía `LLM_BASE_URL`).
-- **Costo estimado por caso.** El contexto fijo (system prompt + esquemas de herramientas) mide aproximadamente 3 000 tokens (calculado sobre los caracteres del prompt y los esquemas; la cifra exacta depende del tokenizador). Procesar el buzón completo (6 mensajes) implica unas 18–20 llamadas a herramientas; el prompt pide agruparlas en paralelo (extraer todos, validar todos, registrar) para resolverlo en 5–8 vueltas. Como cada vuelta reenvía el historial, el orden de magnitud es de **unas decenas de miles de tokens de entrada y 2–4 mil de salida por caso**. Costo ≈ `tokens_entrada × precio_entrada + tokens_salida × precio_salida`, con el precio por millón de tokens vigente en la página de precios del proveedor. El buzón completo cuesta más que un caso individual porque el historial crece con cada mensaje. Estas cifras son una estimación previa, no una medición: el footer del chat muestra los tokens reales de la sesión, que conviene registrar en la prueba con el modelo real.
-- ⚠️ PENDIENTE (Guti): reemplazar la estimación por la medición real (tokens del footer × precio vigente del modelo usado).
+- **Proveedor y modelo usados en la prueba:** OpenAI, modelo `gpt-4.1-mini` (`LLM_PROVIDER=openai`, `LLM_MODEL=gpt-4.1-mini`). Lo elegí porque ya tenía créditos en la API de OpenAI, tiene buen soporte de llamadas a herramientas (incluidas varias en paralelo) y es barato por token. El código también trae un adaptador para Anthropic (Claude); cambiar de proveedor es cambiar dos variables de entorno, sin tocar el ciclo del agente. Para un modelo pequeño como este el diseño es clave: las reglas y los valores los calculan las herramientas, así que el modelo solo orquesta y explica.
+- **Aviso:** la documentación de OpenAI marca `gpt-4.1-mini` como *deprecated* (al 2026-11-05). Funciona hoy, pero si OpenAI lo retira basta con cambiar `LLM_MODEL` por otro modelo de chat disponible en la cuenta.
+- **Costo medido (no estimado).** Precio de `gpt-4.1-mini` según la página del modelo en OpenAI: USD 0,40 por millón de tokens de entrada y USD 1,60 por millón de salida. Tokens reales registrados por el servidor (`out/sessions/`) en mi prueba:
+
+  | Sesión | Turnos | Herramientas | Tokens entrada | Tokens salida | Costo aprox. |
+  |---|---|---|---|---|---|
+  | Buzón completo (6 mensajes) + confirmación de `msg-006` | 2 | 17 | 61 070 | 1 881 | ≈ USD 0,027 |
+
+  **Costo por lote de 6 mensajes: ≈ USD 0,027 (≈ USD 0,005 por mensaje).** La mayor parte es entrada, porque cada vuelta reenvía el historial; pedir las herramientas en paralelo reduce las vueltas.
 
 ## 5. Estrategia de extracción
 
@@ -136,7 +141,8 @@ Las confianzas son **heurísticas de diseño**, no probabilidades calibradas: re
   - *Dejar que el modelo valide o calcule:* toda regla vive en herramientas deterministas; el modelo orquesta y explica. Por eso las herramientas recalculan desde los fixtures lo que el modelo les devuelve y rechazan valores alterados.
   - *Habilitar `confirmado: true` cuando el modelo "pregunta algo":* se descartó porque una pregunta cualquiera ("¿proceso otro caso?") seguida de "sí" habría autorizado acciones externas; solo la marca formal habilita.
   - *Extracción con el modelo como fuente principal:* descartada por trazabilidad y costo; queda como mejora con revisión obligatoria.
-- ⚠️ PENDIENTE (Guti): agregar en primera persona qué revisaste línea a línea, qué cambiaste tú y qué propuestas de la IA rechazaste. El PRD exige poder explicar cada línea en la defensa.
+- **Lo que hice yo:** corrí la demo y el chat en mi computadora (Windows, Bun) con OpenAI `gpt-4.1-mini`, revisé el maestro resultante (`maestro-contratos.csv`), el historial y `alertas.md`, y comparé la clasificación de los 6 mensajes con la tabla 7.4 del PRD. Elegí OpenAI como proveedor porque ya tenía créditos.
+- **Lo que detecté probando y se corrigió:** en la primera prueba el modelo preguntó en texto por los campos en revisión de `msg-006`, pero no registró la confirmación; al responder "confirmo el valor 0 y la fecha fin 2027-08-31" el servidor bloqueó el registro (la protección funcionó, pero obligaba a confirmar dos veces). Le pedí a Claude corregirlo: ahora `contratos_validar` declara en su resultado la confirmación pendiente (`pendiente_confirmacion`) cuando hay campos en revisión, sin depender de que el modelo se acuerde. Reproduje el caso y el registro quedó al primer "confirmo".
 
 ## 11. Riesgos de llevarlo a producción
 

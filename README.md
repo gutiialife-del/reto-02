@@ -6,8 +6,10 @@ Agente conversacional que actúa como **punto único de recepción** de contrato
 
 ## Link de prueba
 
-**URL:** ⚠️ PENDIENTE — completar con la URL pública después de desplegar (ver «Despliegue»).
-**Clave de acceso:** ⚠️ PENDIENTE — si defines `ACCESS_KEY` en el servidor, escríbela aquí; si no, borra esta línea.
+**URL:** https://reto-02.onrender.com  (estado: https://reto-02.onrender.com/api/health)
+**Clave de acceso:** `periferia2026` (el chat la pide al abrir el link).
+
+Desplegado en Render (plan gratuito) con OpenAI `gpt-4.1-mini`. Si el servicio estaba inactivo, el primer acceso puede tardar alrededor de un minuto en despertar.
 
 ## Levantar en local (un comando)
 
